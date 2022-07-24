@@ -1,9 +1,13 @@
-package com.example.login
+package com.example.login.listdata
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.login.DetailListData
+import com.example.login.R
 import kotlinx.android.synthetic.main.list_data_item.view.*
 
 class ListDataAdapter(
@@ -12,14 +16,8 @@ class ListDataAdapter(
 
 ) : RecyclerView.Adapter<ListDataAdapter.UserViewHolder>() {
 
-    private var onItemClickCallback: OnItemClickCallback? = null
-
-    fun setOnItemCallback(onItemClickCallback: OnItemClickCallback) {
-        this.onItemClickCallback = onItemClickCallback
-    }
-
     inner class UserViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        fun bind(post: ListDataResponse, listData: ListData) {
+        fun bind(post: ListDataResponse) {
             with(itemView) {
                 val text = "No Order: ${post.no_order}\n" +
                         "ID Order: ${post.id_order}\n" +
@@ -29,7 +27,10 @@ class ListDataAdapter(
                         "Status Pengiriman: ${post.status_pengiriman}"
 
                 tvResponse.text = text
-                itemView.setOnClickListener { onItemClickCallback?.onItemClicked(listData) }
+                btnDetail.setOnClickListener {
+                    val intent = Intent(context, DetailListData::class.java)
+                    startActivity(this.context, intent, null)
+                }
             }
         }
     }
@@ -42,12 +43,9 @@ class ListDataAdapter(
     }
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        holder.bind(list[position], listData = ListData())
+        holder.bind(list[position])
     }
 
     override fun getItemCount(): Int = list.size
 
-    interface OnItemClickCallback {
-        fun onItemClicked(data: ListData)
-    }
 }
