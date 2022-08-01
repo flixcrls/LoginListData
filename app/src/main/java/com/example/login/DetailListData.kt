@@ -1,40 +1,51 @@
 package com.example.login
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.login.listdata.ListDataResponse
-import kotlinx.android.synthetic.main.detail_list_data.*
+import com.example.login.databinding.DetailListDataBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class DetailListData: AppCompatActivity() {
 
-    private val list = ArrayList<DetailListDataResponse>()
+    private lateinit var binding: DetailListDataBinding
+
+    private var list = ArrayList<DetailListDataResponse>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.detail_list_data)
+        binding = DetailListDataBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+        showDetailListData()
+    }
 
-        rvPost.setHasFixedSize(true)
-        rvPost.layoutManager = LinearLayoutManager(this)
+
+    private fun showDetailListData() {
+        binding.rvPost.setHasFixedSize(true)
+        binding.rvPost.layoutManager = LinearLayoutManager(this)
 
         RetrofitClient.instance.getPostsDetail("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6Ijc5NThiNTA3YjQyMTg1ZDg1MjlkMjJkYTUxNmE5ZTI0ZWQ1MGNiYWI5YTAzYzIyYmRkNTY3NTJhMzJiMDBjMTllMzg2NWQ3YzA2YjhkMTU1NjgzMTkwNjIyZDc3M2RjMDRmMWE4ZGVkNzRlZmFlYjliMjAyMjQzNjMzOTQwZDIyVHJmdVBETGRTS0x0aXJyYXgraktMNEVaMkE9PSIsInVzZXJuYW1lIjoiRW5kaSBTdW1hcm5vIiwidG9rZW4iOiJDTTJ6b0NxNWk4Z1VaRU5nIiwidGltZXN0YW1wIjoxNjU4MTk1Njc4fQ.WZ0KWJ4Zpq359yJw-ZlgJN1hkgFQjG7kIY6fiDdFj2w",
-        1, 10, 1)
-            .enqueue(object: Callback<ArrayList<ListDataResponse>> {
+        2574)
+            .enqueue(object: Callback<ArrayList<DetailListDataResponse>> {
                 override fun onResponse(
-                    call: Call<ArrayList<ListDataResponse>>,
-                    response: Response<ArrayList<ListDataResponse>>
+                    call: Call<ArrayList<DetailListDataResponse>>,
+                    response: Response<ArrayList<DetailListDataResponse>>
                 ) {
                     val listResponse = response.body()
-                    response.body()?.let { listResponse?.addAll(it) }
+                    listResponse?.let { list.addAll(it) }
                     val adapter = DetailListDataAdapter(list)
-                    rvPost.adapter = adapter
+                    binding.rvPost.adapter = adapter
                 }
 
-                override fun onFailure(call: Call<ArrayList<ListDataResponse>>, t: Throwable) {
-
+                override fun onFailure(
+                    call: Call<ArrayList<DetailListDataResponse>>,
+                    t: Throwable
+                ) {
+                    t.message?.let { Log.e("error", it) }
                 }
 
             })

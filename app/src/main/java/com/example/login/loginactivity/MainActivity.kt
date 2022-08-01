@@ -5,22 +5,26 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.login.*
+import com.example.login.databinding.ActivityMainBinding
 import com.example.login.listdata.ListData
-import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
         initAction()
     }
 
     private fun initAction() {
-        btnLogin.setOnClickListener {
+        binding.btnLogin.setOnClickListener {
             login()
 //            Intent(this, ListData::class.java).also {
 //                startActivity(it)
@@ -30,8 +34,8 @@ class MainActivity : AppCompatActivity() {
 
     fun login() {
         val request = UserRequest()
-        request.username = etUsername.text.toString().trim()
-        request.password = etPassword.text.toString().trim()
+        request.username = binding.etUsername.text.toString().trim()
+        request.password = binding.etPassword.text.toString().trim()
 
         val retro = Retro().getRetroClientInstance().create(UserApi::class.java)
         retro.login(request).enqueue(object : Callback<UserResponse> {

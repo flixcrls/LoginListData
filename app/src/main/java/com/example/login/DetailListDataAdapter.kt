@@ -1,31 +1,31 @@
 package com.example.login
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.view.menu.MenuView
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.detail_list_data_item.view.*
+import com.example.login.databinding.DetailListDataItemBinding
 
 class DetailListDataAdapter(
     private val list: ArrayList<DetailListDataResponse>
 ): RecyclerView.Adapter<DetailListDataAdapter.PostViewHolder>() {
 
-    inner class PostViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class PostViewHolder(val binding: DetailListDataItemBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(postResponse: DetailListDataResponse) {
             with(itemView) {
-                val text = "Detail: ${postResponse.detail}\n" +
-                        "Pengirim: ${postResponse.pengirim}\n" +
-                        "Penerima: ${postResponse.penerima}"
+                val text = "Nama: ${postResponse.detail.namaPerjanjian}\n" +
+                        "Tipe Pengiriman: ${postResponse.detail.tipePengiriman}\n" +
+                        "Nama Transporter: ${postResponse.detail.namaTransporter}\n" +
+                        "Harga: ${postResponse.detail.harga}\n" +
+                        "Gambar: ${postResponse.detail.image}"
 
-                tvText.text = text
+                binding.tvText.text = text
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.detail_list_data_item, parent, false)
-        return PostViewHolder(view)
+        val binding = DetailListDataItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return PostViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
